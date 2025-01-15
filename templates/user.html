@@ -1,0 +1,93 @@
+<!-- @Author: PT
+@CreateTime: 2024-06-05
+@Description:用户信息管理界面
+@Version:1.0 -->
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户信息</title>
+  <link rel="shortcut icon" href="../static/images/logo.png">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+  <link rel="stylesheet" href="../static/css/user.css">
+</head>
+
+<body>
+  <!-- 侧边导航栏 -->
+  <nav class="shell close">
+    <header>
+      <div class="image-text">
+        <span class="image"><img src="../static/images/青黛.png" alt=""></span>
+        <div class="text logo-text">
+          <span class="name1">中医诊疗</span>
+          <span class="name2">多模态知识图谱</span>
+        </div>
+      </div>
+      <i class='bx bxs-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links">
+          <li class="nav-link">
+            <a href="http://localhost:5000/display" title="可视化">
+              <i class='bx bxs-network-chart icon'></i>
+              <span class="text nac-text">可视化</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/diagnosis" title="诊疗">
+              <i class='bx bxs-brain icon'></i>
+              <span class="text nac-text">诊疗</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/manage" title="管理">
+              <i class='bx bxs-data icon'></i>
+              <span class="text nac-text">管理</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/user" title="用户">
+              <i class='bx bx-user icon'></i>
+              <span class="text nac-text">用户</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-content">
+        <li class="">
+          <a href="http://localhost:5000" title="注销">
+            <i class='bx bx-log-out-circle icon'></i>
+            <span class="text nac-text">注销</span>
+          </a>
+        </li>
+      </div>
+    </div>
+  </nav>
+  <!-- 内容 -->
+  <div class="content">
+    <div class="row">
+      <!-- 用户图标 -->
+      <img src="../static/images/青黛.png" alt="">
+      <h2>修改密码</h2>
+      <h3>Modify Password</h3>
+      <div class="old-psw">
+        <span>旧密码</span>
+        <input type="password" name="old_pwd" id="old_pwd" class="old_pwd" placeholder="请输入旧密码" required>
+      </div>
+      <div class="new-psw">
+        <span>新密码</span>
+        <input type="password" name="new_pwd" id="new_pwd" class="new_pwd" placeholder="请输入新密码" required>
+      </div>
+      <button id="modify_psw" class="modify_psw" onclick="buttonClick()">确认修改</button>
+    </div>
+  </div>
+</body>
+
+<script src="../static/js/user.js"></script>
+
+</html>

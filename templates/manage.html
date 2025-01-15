@@ -1,0 +1,417 @@
+<!-- @Author: PT
+@CreateTime: 2024-06-05
+@Description:图谱管理界面
+@Version:1.0 -->
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图谱管理</title>
+  <link rel="shortcut icon" href="../static/images/logo.png">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+  <link rel="stylesheet" href="../static/css/manage.css">
+</head>
+
+<body>
+  <!-- 侧边导航栏 -->
+  <nav class="shell close">
+    <header>
+      <div class="image-text">
+        <span class="image"><img src="../static/images/青黛.png" alt=""></span>
+        <div class="text logo-text">
+          <span class="name1">中医诊疗</span>
+          <span class="name2">多模态知识图谱</span>
+        </div>
+      </div>
+      <i class='bx bxs-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links">
+          <li class="nav-link">
+            <a href="http://localhost:5000/display" title="可视化">
+              <i class='bx bxs-network-chart icon'></i>
+              <span class="text nac-text">可视化</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/diagnosis" title="诊疗">
+              <i class='bx bxs-brain icon'></i>
+              <span class="text nac-text">诊疗</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/manage" title="管理">
+              <i class='bx bxs-data icon'></i>
+              <span class="text nac-text">管理</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/user" title="用户">
+              <i class='bx bx-user icon'></i>
+              <span class="text nac-text">用户</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-content">
+        <li class="">
+          <a href="http://localhost:5000" title="注销">
+            <i class='bx bx-log-out-circle icon'></i>
+            <span class="text nac-text">注销</span>
+          </a>
+        </li>
+      </div>
+    </div>
+  </nav>
+  <!-- 内容 -->
+  <div class="content">
+    <div class="col">
+      <!-- 首行 -->
+      <div class="row row-top">
+        <img src="../static/images/login_bg1.png" alt="">
+      </div>
+      <!-- 中间行 -->
+      <div class="row row-center">
+        <div class="center-left">
+          <div class="xlk">
+            <h2>请选择节点种类</h2>
+            <!-- 下拉框 选择类型 -->
+            <div class="select">
+              <div id="selected" class="selected" data-default="症状" data-one="证素" data-two="证" data-three="代表方"
+                data-four="中药">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
+                  <path
+                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                  </path>
+                </svg>
+              </div>
+              <div id="options" class="options">
+                <div title="症状">
+                  <input id="all" name="option" type="radio" checked="" />
+                  <label class="option" for="all" data-txt="症状"></label>
+                </div>
+                <div title="证素">
+                  <input id="option-1" name="option" type="radio" />
+                  <label class="option" for="option-1" data-txt="证素"></label>
+                </div>
+                <div title="证">
+                  <input id="option-2" name="option" type="radio" />
+                  <label class="option" for="option-2" data-txt="证"></label>
+                </div>
+                <div title="代表方">
+                  <input id="option-3" name="option" type="radio" />
+                  <label class="option" for="option-3" data-txt="代表方"></label>
+                </div>
+                <div title="中药">
+                  <input id="option-4" name="option" type="radio" />
+                  <label class="option" for="option-4" data-txt="中药"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="center-right">
+          <div class="center-right-top">
+            <div class="search_box">
+              <!-- 搜索框 -->
+              <input type="text" name="search_input" id="search_input" class="search_input" placeholder="请输入节点标准名...">
+            </div>
+          </div>
+          <div class="center-right-bottom">
+            <div class="btn_box">
+              <!-- 增删改查btn -->
+              <button id="search_btn" class="search_btn" title="查找单个节点" onclick="searchClick();">查找</button>
+              <button id="modify_all_btn" class="modify_all_btn" title="修改单个节点"
+                onclick="popupModifyToggle();">修改</button>
+              <!-- 证模态框 -->
+              <div id="popup_modify_zheng" class="popup_modify popup_modify_zheng">
+                <div class="modal_content">
+                  <h2>修改证</h2>
+                  <p>注：需按照要求填写，*代表不可修改</p>
+                  <div class="inputBox zheng_inputBox">
+                    <span>*Id：</span><input id="zheng_Id_input" class="zheng_Id_input" type="text" placeholder="请输入Id"
+                      readonly="readonly"><br><br>
+                    <!-- 给标准名的输入框设置只读（为了修改不出错） -->
+                    <span>*标准名：</span><input id="zheng_bzm_input" class="zheng_bzm_input" type="text"
+                      placeholder="请输入标准名" readonly="readonly"><br><br>
+                    <span>种类：</span><input id="zheng_zl_input" class="zheng_zl_input" type="text"
+                      placeholder="请输入种类"><br><br>
+                    <span>脏腑：</span><input id="zheng_zf_input" class="zheng_zf_input" type="text"
+                      placeholder="请输入脏腑"><br><br>
+                    <span>必有证素：</span><input id="zheng_byzs_input" class="zheng_byzs_input" type="text"
+                      placeholder="请输入必有证素"><br><br>
+                    <span>或有证素：</span><input id="zheng_hyzs_input" class="zheng_hyzs_input" type="text"
+                      placeholder="请输入或有证素">
+                  </div>
+                  <button class="modify_btn" onclick="modifyClick();">修改证</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupModifyToggle();">&#10005</a>
+              </div>
+              <!-- 证素模态框 -->
+              <div id="popup_modify_zs" class="popup_modify popup_modify_zs">
+                <div class="modal_content">
+                  <h2>修改证素</h2>
+                  <p>注：需按照要求填写，*代表不可修改</p>
+                  <div class="inputBox zs_inputBox">
+                    <span>*Id：</span><input id="zs_Id_input" class="zs_Id_input" type="text" placeholder="请输入Id"
+                      readonly="readonly"><br><br>
+                    <span>*标准名：</span><input id="zs_bzm_input" class="zs_bzm_input" type="text" placeholder="请输入标准名"
+                      readonly="readonly"><br><br>
+                    <span>拼音：</span><input id="zs_py_input" class="zs_py_input" type="text" placeholder="请输入拼音"><br><br>
+                    <span>病位：</span><input id="zs_bw_input" class="zs_bw_input" type="text" placeholder="请输入是否为病位">
+                  </div>
+                  <button class="modify_btn" onclick="modifyClick();">修改证素</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupModifyToggle();">&#10005</a>
+              </div>
+              <!-- 症状模态框 -->
+              <div id="popup_modify_zz" class="popup_modify popup_modify_zz">
+                <div class="modal_content">
+                  <h2>修改症状</h2>
+                  <p>注：需按照要求填写，*代表不可修改</p>
+                  <div class="inputBox zz_inputBox">
+                    <span>*Id：</span><input id="zz_Id_input" class="zz_Id_input" type="text" placeholder="请输入Id"
+                      readonly="readonly"><br><br>
+                    <span>*标准名：</span><input id="zz_bzm_input" class="zz_bzm_input" type="text" placeholder="请输入标准名"
+                      readonly="readonly"><br><br>
+                    <span>拼音：</span><input id="zz_py_input" class="zz_py_input" type="text" placeholder="请输入拼音"><br><br>
+                    <span>种类：</span><input id="zz_zl_input" class="zz_zl_input" type="text" placeholder="请输入种类"><br><br>
+                    <span>image：</span><input id="zz_image_input" class="zz_image_input" type="text"
+                      placeholder="请输入image链接">
+                  </div>
+                  <button class="modify_btn" onclick="modifyClick();">修改症状</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupModifyToggle();">&#10005</a>
+              </div>
+              <!-- 中药模态框 -->
+              <div id="popup_modify_cm" class="popup_modify popup_modify_cm">
+                <div class="modal_content">
+                  <h2>修改中药</h2>
+                  <p>注：需按照要求填写，*代表不可修改</p>
+                  <div class="inputBox cm_inputBox">
+                    <span>*Id：</span><input id="cm_Id_input" class="cm_Id_input" type="text" placeholder="请输入Id"
+                      readonly="readonly"><br><br>
+                    <span>*中药名：</span><input id="cm_zym_input" class="cm_zym_input" type="text" placeholder="请输入中药名"
+                      readonly="readonly"><br><br>
+                    <span>性味：</span><input id="cm_xw_input" class="cm_xw_input" type="text" placeholder="请输入性味"><br><br>
+                    <span>归经：</span><input id="cm_gj_input" class="cm_gj_input" type="text" placeholder="请输入归经"><br><br>
+                    <span>image：</span><input id="cm_image_input" class="cm_image_input" type="text"
+                      placeholder="请输入image链接">
+                  </div>
+                  <button class="modify_btn" onclick="modifyClick();">修改中药</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupModifyToggle();">&#10005</a>
+              </div>
+              <button id="del_btn" class="del_btn" title="删除单个节点" onclick="delClick();">删除</button>
+              <button id="add_one_btn" class="add_one_btn" title="增加单个节点" onclick="popupAddToggle();">增加</button>
+              <!-- 证模态框 -->
+              <div id="popup_add_zheng" class="popup_add popup_add_zheng">
+                <div class="modal_content">
+                  <h2>增加证</h2>
+                  <p>注：需按照要求填写，除Id以外都是必填</p>
+                  <div class="inputBox zheng_inputBox">
+                    <span>Id：</span><input id="zheng_Id_add_input" class="zheng_Id_add_input" type="text"
+                      placeholder="Id自动生成" readonly="readonly"><br><br>
+                    <span>标准名：</span><input id="zheng_bzm_add_input" class="zheng_bzm_add_input" type="text"
+                      placeholder="请输入标准名"><br><br>
+                    <span>种类：</span><input id="zheng_zl_add_input" class="zheng_zl_add_input" type="text"
+                      placeholder="请输入种类"><br><br>
+                    <span>脏腑：</span><input id="zheng_zf_add_input" class="zheng_zf_add_input" type="text"
+                      placeholder="请输入脏腑"><br><br>
+                    <span>必有证素：</span><input id="zheng_byzs_add_input" class="zheng_byzs_add_input" type="text"
+                      placeholder="请输入必有证素"><br><br>
+                    <span>或有证素：</span><input id="zheng_hyzs_add_input" class="zheng_hyzs_add_input" type="text"
+                      placeholder="请输入或有证素">
+                  </div>
+                  <button class="add_inner_btn" onclick="addClick();">增加证</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupAddToggle();">&#10005</a>
+              </div>
+              <!-- 症状模态框 -->
+              <div id="popup_add_zz" class="popup_add popup_add_zz">
+                <div class="modal_content">
+                  <h2>增加单个症状</h2>
+                  <p>注：需按照要求填写，除Id以外都是必填</p>
+                  <div class="inputBox zz_inputBox">
+                    <span>Id：</span><input id="zz_Id_add_input" class="zz_Id_add_input" type="text" placeholder="Id自动生成"
+                      readonly="readonly"><br><br>
+                    <span>标准名：</span><input id="zz_bzm_add_input" class="zz_bzm_add_input" type="text"
+                      placeholder="请输入标准名"><br><br>
+                    <span>拼音：</span><input id="zz_py_add_input" class="zz_py_add_input" type="text"
+                      placeholder="请输入拼音"><br><br>
+                    <span>种类：</span><input id="zz_zl_add_input" class="zz_zl_add_input" type="text"
+                      placeholder="请输入种类"><br><br>
+                    <span>image：</span><input id="zz_image_add_input" class="zz_image_add_input" type="text"
+                      placeholder="请输入image链接">
+                  </div>
+                  <button class="add_inner_btn" onclick="addClick();">增加症状</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupAddToggle();">&#10005</a>
+              </div>
+              <!-- 证素模态框 -->
+              <div id="popup_add_zs" class="popup_add popup_add_zs">
+                <div class="modal_content">
+                  <h2>增加证素</h2>
+                  <p>注：需按照要求填写，除Id以外都是必填</p>
+                  <div class="inputBox zs_inputBox">
+                    <span>Id：</span><input id="zs_Id_add_input" class="zs_Id_add_input" type="text" placeholder="Id自动生成"
+                      readonly="readonly"><br><br>
+                    <span>标准名：</span><input id="zs_bzm_add_input" class="zs_bzm_add_input" type="text"
+                      placeholder="请输入标准名"><br><br>
+                    <span>拼音：</span><input id="zs_py_add_input" class="zs_py_add_input" type="text"
+                      placeholder="请输入拼音"><br><br>
+                    <span>病位：</span><input id="zs_bw_add_input" class="zs_bw_add_input" type="text"
+                      placeholder="请输入是否为病位">
+                  </div>
+                  <button class="add_inner_btn" onclick="addClick();">增加证素</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupAddToggle();">&#10005</a>
+              </div>
+              <!-- 代表方模态框 -->
+              <div id="popup_add_dbf" class="popup_add popup_add_dbf">
+                <div class="modal_content">
+                  <h2>增加代表方</h2>
+                  <p>注：需按照要求填写，除Id以外都是必填</p>
+                  <div class="inputBox dbf_inputBox">
+                    <span>Id：</span><input id="dbf_Id_add_input" class="dbf_Id_add_input" type="text"
+                      placeholder="Id自动生成" readonly="readonly"><br><br>
+                    <span>代表方：</span><input id="dbf_dbf_add_input" class="dbf_dbf_add_input" type="text"
+                      placeholder="请输入代表方名">
+                  </div>
+                  <button class="add_inner_btn" onclick="addClick();">增加代表方</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupAddToggle();">&#10005</a>
+              </div>
+              <!-- 中药模态框 -->
+              <div id="popup_add_cm" class="popup_add popup_add_cm">
+                <div class="modal_content">
+                  <h2>增加中药</h2>
+                  <p>注：需按照要求填写，除Id以外都是必填</p>
+                  <div class="inputBox cm_inputBox">
+                    <span>Id：</span><input id="cm_Id_add_input" class="cm_Id_add_input" type="text" placeholder="Id自动生成"
+                      readonly="readonly"><br><br>
+                    <span>中药名：</span><input id="cm_zym_add_input" class="cm_zym_add_input" type="text"
+                      placeholder="请输入中药名"><br><br>
+                    <span>性味：</span><input id="cm_xw_add_input" class="cm_xw_add_input" type="text"
+                      placeholder="请输入性味"><br><br>
+                    <span>归经：</span><input id="cm_gj_add_input" class="cm_gj_add_input" type="text"
+                      placeholder="请输入归经"><br><br>
+                    <span>image：</span><input id="cm_image_add_input" class="cm_image_add_input" type="text"
+                      placeholder="请输入image链接">
+                  </div>
+                  <button class="add_inner_btn" onclick="addClick();">增加中药</button>
+                </div>
+                <!-- 关闭符号x -->
+                <a class="close_note" onclick="popupAddToggle();">&#10005</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 底行 -->
+      <div class="row row-bottom">
+        <div class="bottom-left">
+          <!-- 上传要求文本 -->
+          <div class="require_txt">
+            <h2>批量增加节点</h2>
+            <h3>上传步骤</h3>
+            <p>① 下载模板 templates_csv.zip</p>
+            <p>② 根据需求在对应csv表中填入数据</p>
+            <p>③ 选择对应表格进行上传</p>
+            <p>④ 选择对应表进行节点及其关系的批量增加</p>
+            <h3>上传要求:</h3>
+            <p>① 文件格式为csv，字符编码为UTF-8</p>
+            <p>② 请严格按照下载模板内容填写数据</p>
+            <p>③ 请勿修改各表的文件名</p>
+            <p>④ 各表的实体、关系说明均在下载模板中</p>
+          </div>
+        </div>
+        <div class="bottom-right">
+          <div class="bottom-right-top">
+            <!-- 模板下载部分 -->
+            <form action="/download" id="download_csv" class="download_csv">
+              <p>模板下载</p>
+              <button type="submit" id="download_submit" class="download_submit"><i class='bx bx-download'></i></button>
+            </form>
+          </div>
+          <div class="bottom-right-center">
+            <!-- 上传文件部分 -->
+            <form method="POST" name="upload_csv" id="upload_csv" class="upload_csv" enctype="multipart/form-data">
+              <input type="file" name="file" id="upload_input" class="upload_input" accept=".csv">
+              <input type="submit" id="upload_submit" class="upload_submit" value="上传">
+            </form>
+          </div>
+          <div class="bottom-right-bottom">
+            <p class="adds_p">请选择对应表进行批量增加：</p>
+            <div class="btn_group1">
+              <button id="upload_cm" class="upload_cm upload_btn" title="ChineseMedicine" onclick="cmClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  中药表
+                </span>
+              </button>
+              <button id="upload_pcm" class="upload_pcm upload_btn" title="Perscription_CM" onclick="pcmClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  代表方-中药表
+                </span>
+              </button>
+            </div>
+            <div class="btn_group2">
+              <button id="upload_sz" class="upload_sz upload_btn" title="StandardZheng" onclick="szClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  证表
+                </span>
+              </button>
+              <button id="upload_sz_zs" class="upload_sz_zs upload_btn" title="StandardZheng_Zhengsu"
+                onclick="sz_zsClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  证-证素表
+                </span>
+              </button>
+            </div>
+            <div class="btn_group3">
+              <button id="upload_symptom" class="upload_symptom upload_btn" title="Symptom" onclick="symptomClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  症状表
+                </span>
+              </button>
+              <button id="upload_snn" class="upload_snn upload_btn" title="SymptomNickName" onclick="snnClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  症状别名表
+                </span>
+              </button>
+              <button id="upload_zs_s" class="upload_zs_s upload_btn" title="Zhengsu_Symptom" onclick="zs_sClick();">
+                <i class='bx bx-file'></i>
+                <span class="submit_text">
+                  证素-症状表
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="../static/js/manage.js"></script>
+
+</html>

@@ -1,0 +1,171 @@
+<!-- @Author: PT
+@CreateTime: 2024-06-05
+@Description:图谱展示界面
+@Version:1.0 -->
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图谱展示</title>
+  <link rel="shortcut icon" href="../static/images/logo.png">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script>
+  <link rel="stylesheet" href="../static/css/display.css">
+</head>
+
+<body>
+  <!-- 侧边导航栏 -->
+  <nav class="shell close">
+    <header>
+      <div class="image-text">
+        <span class="image"><img src="../static/images/青黛.png" alt=""></span>
+        <div class="text logo-text">
+          <span class="name1">中医诊疗</span>
+          <span class="name2">多模态知识图谱</span>
+        </div>
+      </div>
+      <i class='bx bxs-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links">
+          <li class="nav-link">
+            <a href="http://localhost:5000/display" title="可视化">
+              <i class='bx bxs-network-chart icon'></i>
+              <span class="text nac-text">可视化</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/diagnosis" title="诊疗">
+              <i class='bx bxs-brain icon'></i>
+              <span class="text nac-text">诊疗</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/manage" title="管理">
+              <i class='bx bxs-data icon'></i>
+              <span class="text nac-text">管理</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/user" title="用户">
+              <i class='bx bx-user icon'></i>
+              <span class="text nac-text">用户</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-content">
+        <li class="">
+          <a href="http://localhost:5000" title="注销">
+            <i class='bx bx-log-out-circle icon'></i>
+            <span class="text nac-text">注销</span>
+          </a>
+        </li>
+      </div>
+    </div>
+  </nav>
+  <!-- 内容 -->
+  <div class="content">
+    <div class="col">
+      <!-- 上行 -->
+      <div class="row row-top">
+        <!-- 搜索框 -->
+        <div class="top-left">
+          <div class="top-left-left">
+            <h1>多模态知识图谱</h1>
+            <h2>Multi-Modal Knowledge Graph</h2>
+          </div>
+          <div class="top-left-right">
+            <form class="searchbox">
+              <!-- 后端获取输入框内容靠name -->
+              <input type="text" name="search" id="search" class="search" placeholder="请输入单个症状搜索其图谱...">
+              <button id="search_btn" class="search_btn"><i class="bx bx-search"></i></button>
+            </form>
+            <div class="recommend">
+              <span>推荐：</span>
+              <label onclick="ksClick();">咳嗽</label>
+              <label onclick="sdClick();">舌淡</label>
+              <span>...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 底行 -->
+      <div class="row row-bottom">
+        <!-- 知识图谱关系图 -->
+        <div class="bottom-left">
+          <div id="kg_graph" class="kg_graph"></div>
+        </div>
+        <!-- 节点属性展示框 -->
+        <div class="bottom-right">
+          <div class="attribute_box">
+            <img src="../static/images/中药.png" alt="" id="change"></a>
+            <!-- 第一行属性 -->
+            <div style="display: inline-block;">
+              <p class="s1" id="s1">点击节点显示相关信息</p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s2" id="s2"></p>
+            </div>
+            <br>
+            <!-- 第二行属性 -->
+            <div style="display: inline-block;">
+              <p class="s3" id="s3"></p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s4" id="s4"></p>
+            </div>
+            <br>
+            <!-- 第三行属性 -->
+            <div style="display: inline-block;">
+              <p class="s5" id="s5"></p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s6" id="s6"></p>
+            </div>
+            <br>
+            <!-- 第四行属性 -->
+            <div style="display: inline-block;">
+              <p class="s7" id="s7"></p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s8" id="s8"></p>
+            </div>
+            <br>
+            <!-- 第五行属性 -->
+            <div style="display: inline-block;">
+              <p class="s9" id="s9"></p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s10" id="s10"></p>
+            </div>
+            <br>
+            <!-- 第六行属性 -->
+            <div style="display: inline-block;">
+              <p class="s11" id="s11"></p>
+            </div>
+            <div style="display: inline-block;">
+              <p class="s12" id="s12"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="../static/js/display.js"></script>
+
+<script>
+  // 知识图谱关系图 + 点击节点显示属性
+  // 接收后端数据（预设值部分）
+  var neo4j_data = eval('[{{ neo4j_data|safe }}]')
+  var data1 = neo4j_data[0]['data']
+  var links1 = neo4j_data[0]['links']
+  var categories1 = [{ name: "症状" }, { name: "症状别名" }, { name: "症状种类" }, { name: "证" }, { name: "证素" }, { name: "代表方" }, { name: "中药" }];
+  kg_gxt(data1, links1, categories1);
+</script>
+
+</html>

@@ -1,0 +1,388 @@
+/* @Author: PT
+@CreateTime: 2024-06-05
+@Description:图谱展示界面
+@Version:1.0 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--body-color);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* 设置全局变量 */
+:root {
+  --body-color: rgba(213, 224, 213, 0.5);
+  --shell-color: rgb(213, 224, 213);
+  --primary-color: #81a380;
+  --primary-color-light: #cad7c5;
+  --toggle-color: #ddd;
+  --text-color: #707070;
+}
+
+/* 侧边导航栏 */
+.shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 240px;
+  padding: 10px 14px;
+  background-color: var(--shell-color);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.close {
+  width: 88px;
+}
+
+.shell li {
+  height: 50px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.image {
+  min-width: 60px;
+  border-radius: 6px;
+}
+
+.icon {
+  min-width: 60px;
+  border-radius: 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 300 23px;
+  transform: scale(1.3);
+}
+
+.text,
+.icon {
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.text {
+  font: 500 17px;
+  white-space: nowrap;
+  opacity: 1;
+}
+
+.shell.close .text {
+  opacity: 0;
+}
+
+header {
+  position: relative;
+}
+
+.image-text {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.name1 {
+  margin-top: 2px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.name2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.nac-text {
+  font-size: 18px;
+}
+
+.image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image img {
+  width: 45px;
+  border-radius: 6px;
+}
+
+.toggle {
+  position: absolute;
+  top: 50%;
+  right: -25px;
+  transform: translateY(-50%) rotate(180deg);
+  height: 25px;
+  width: 25px;
+  background-color: var(--primary-color);
+  color: var(--shell-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle {
+  color: #ccc;
+}
+
+.shell.close .toggle {
+  transform: translateY(-50%) rotate(0deg);
+}
+
+.menu {
+  margin-top: 40px;
+}
+
+.shell li a {
+  list-style: none;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.shell li a:hover {
+  background-color: var(--primary-color);
+}
+
+.shell li a:hover .icon,
+.shell li a:hover .text {
+  color: var(--shell-color);
+}
+
+.menu-bar {
+  height: calc(100% - 55px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: scroll;
+}
+
+.menu-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 右侧内容 */
+.content {
+  height: 100vh;
+  margin-left: 88px;
+}
+
+.row {
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+
+/* 上行 */
+.row-top {
+  height: 14vh;
+  width: (100vw - 88px);
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  display: flex;
+}
+
+.top-left {
+  height: 14vh;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: #81a380;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 10px;
+}
+
+.top-left-right {
+  margin-left: 30px;
+}
+
+/* 底行 */
+.row-bottom {
+  height: 83vh;
+  width: (100vw - 88px);
+  margin-bottom: 1vh;
+  display: flex;
+}
+
+.bottom-left {
+  height: 83vh;
+  flex: 2.5;
+  margin-right: 0.5vw;
+  justify-content: center;
+  align-items: center;
+  border: #81a380;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 10px;
+}
+
+.bottom-right {
+  height: 83vh;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border: #81a380;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 10px;
+}
+
+/* 搜索框 */
+.searchbox {
+  width: 28vw;
+  height: 6.5vh;
+  background-color: transparent;
+  border: 3px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.searchbox input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  padding-left: 10px;
+}
+
+.searchbox input::placeholder {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.search_btn {
+  width: 3vw;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+}
+
+.search_btn i {
+  font-size: 22px;
+  margin-top: 3px;
+}
+
+/* 推荐词 */
+.recommend {
+  width: 18vw;
+  margin-top: 0.5vh;
+}
+
+.top-left-left h1 {
+  padding-left: 70px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.top-left-left h2 {
+  color: rgba(79, 121, 74, 0.6);
+}
+
+/* 标签下划线动画 */
+.recommend label {
+  position: relative;
+  text-decoration: none;
+}
+
+.recommend label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000000;
+  bottom: -5px;
+  border-radius: 5px;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: .5s ease;
+}
+
+.recommend label:hover::after {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 知识图谱关系图 */
+.kg_graph {
+  height: 82.3vh;
+}
+
+/* 图片 + 属性框 */
+.attribute_box {
+  width: 26vw;
+  height: 82vh;
+  margin-top: 0.25vh;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  background-repeat: no-repeat;
+  background-image: url(../images/image_card.png);
+  background-position: 100% 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.attribute_box:hover {
+  box-shadow: 1px 5px 20px 5px rgba(0, 0, 0, .3);
+}
+
+.attribute_box img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+/* 卡片中文字内容 */
+.s1,
+.s3,
+.s5,
+.s7,
+.s9,
+.s11 {
+  padding: 20px 0px 10px 20px;
+  font-weight: 600;
+}
+
+.s2,
+.s4,
+.s6,
+.s8,
+.s10,
+.s12 {
+  padding: 10px 20px 10px 0px;
+  font-weight: 600;
+}

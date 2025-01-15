@@ -1,0 +1,363 @@
+<!-- @Author: PT
+@CreateTime: 2024-06-05
+@Description:中医诊疗界面
+@Version:1.0 -->
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中医诊疗</title>
+  <link rel="shortcut icon" href="../static/images/logo.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+  <link rel="stylesheet" href="../static/css/diagnosis.css">
+</head>
+
+<body>
+  <!-- 侧边导航栏 -->
+  <nav class="shell close">
+    <header>
+      <div class="image-text">
+        <span class="image"><img src="../static/images/青黛.png" alt=""></span>
+        <div class="text logo-text">
+          <span class="name1">中医诊疗</span>
+          <span class="name2">多模态知识图谱</span>
+        </div>
+      </div>
+      <i class='bx bxs-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links">
+          <li class="nav-link">
+            <a href="http://localhost:5000/display" title="可视化">
+              <i class='bx bxs-network-chart icon'></i>
+              <span class="text nac-text">可视化</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/diagnosis" title="诊疗">
+              <i class='bx bxs-brain icon'></i>
+              <span class="text nac-text">诊疗</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/manage" title="管理">
+              <i class='bx bxs-data icon'></i>
+              <span class="text nac-text">管理</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="http://localhost:5000/user" title="用户">
+              <i class='bx bx-user icon'></i>
+              <span class="text nac-text">用户</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-content">
+        <li class="">
+          <a href="http://localhost:5000" title="注销">
+            <i class='bx bx-log-out-circle icon'></i>
+            <span class="text nac-text">注销</span>
+          </a>
+        </li>
+      </div>
+    </div>
+  </nav>
+  <!-- 内容 -->
+  <div class="content">
+    <div class="row">
+      <!-- 左列 -->
+      <div class="col col-left">
+        <!-- 症状-证素得分图 -->
+        <div class="left-top">
+          <!-- 堆叠柱状图 -->
+          <div id="stacked_bar_graph" class="stacked_bar_graph"></div>
+        </div>
+        <!-- 证素得分图 -->
+        <div class="left-center">
+          <div id="radar_graph" class="radar_graph"></div>
+        </div>
+        <!-- 证素得分前五图 -->
+        <div class="left-bottom">
+          <div id="treemap_graph" class="treemap_graph"></div>
+        </div>
+      </div>
+      <!-- 中列 -->
+      <div class="col col-center">
+        <!-- 搜索框 -->
+        <div class="center-top">
+          <div class="wbk">
+            <button id="text_btn" class="text_btn" onclick="popuptextToggle();">文</button>
+            <!-- 文模态框（智能搜索提示） -->
+            <div id="popup_text" class="popup_text">
+              <div class="modal_text_content">
+                <!-- 输入框 -->
+                <input type="text" class="suggest_input" id="suggest_input" placeholder="请输入症状（首字母也可）">
+                <!-- 搜索提示词 -->
+                <div class="search_suggest" id="search_suggest">
+                  <!-- li 随搜索结果自动增加 -->
+                  <ul></ul>
+                </div>
+                <button id="confirm_btn" class="confirm_btn" onclick="confirmClick();">确认</button>
+              </div>
+              <!-- 关闭符号x -->
+              <a class="close_note" onclick="popuptextToggle();">&#10005</a>
+            </div>
+            <button id="image_btn" class="image_btn" onclick="popupToggle();">图</button>
+            <!-- 舌图模态框 -->
+            <div id="popup" class="popup">
+              <div class="modal_content">
+                <!-- 第一行 -->
+                <div id="line1" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/1-舌淡红而小.jpg" onclick="img1Click();">
+                    <span onclick="img1Click();">舌淡红而小</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/26-舌苔薄白.jpg" onclick="img26Click();">
+                    <span onclick="img26Click();">舌苔薄白</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/2-舌淡1.jpg" onclick="img2Click();">
+                    <span onclick="img2Click();">舌淡</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/3-舌淡胖.jpg" onclick="img3Click();">
+                    <span onclick="img3Click();">舌淡胖</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/4-舌淡紫.jpg" onclick="img4Click();">
+                    <span onclick="img4Click();">舌淡紫</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/5-舌赤.jpg" onclick="img5Click();">
+                    <span onclick="img5Click();">舌赤</span>
+                  </div>
+                </div>
+                <!-- 第二行 -->
+                <div id="line2" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/6-舌绛1.jpg" onclick="img6Click();">
+                    <span onclick="img6Click();">舌绛</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/7-舌红嫩小1.jpg" onclick="img7Click();">
+                    <span onclick="img7Click();">舌红嫩小</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/8-舌红胖.jpg" onclick="img8Click();">
+                    <span onclick="img8Click();">舌红胖</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/9-舌黯红.jpg" onclick="img9Click();">
+                    <span onclick="img9Click();">舌黯红</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/10-舌尖红1.jpg" onclick="img10Click();">
+                    <span onclick="img10Click();">舌尖红</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/11-舌边红.jpg" onclick="img11Click();">
+                    <span onclick="img11Click();">舌边红</span>
+                  </div>
+                </div>
+                <!-- 第三行 -->
+                <div id="line3" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/12-舌起芒刺.jpg" onclick="img12Click();">
+                    <span onclick="img12Click();">舌起芒刺</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/13-舌有裂纹.jpg" onclick="img13Click();">
+                    <span onclick="img13Click();">舌有裂纹</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/21-舌白如镜3.jpg" onclick="img21Click();">
+                    <span onclick="img21Click();">舌白如镜</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/15-舌有斑点.jpg" onclick="img15Click();">
+                    <span onclick="img15Click();">舌有斑点</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/16-舌有齿印.jpg" onclick="img16Click();">
+                    <span onclick="img16Click();">舌有齿印</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/17-舌体萎软.jpg" onclick="img17Click();">
+                    <span onclick="img17Click();">舌体萎软</span>
+                  </div>
+                </div>
+                <!-- 第四行 -->
+                <div id="line4" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/18-舌体歪斜.jpg" onclick="img18Click();">
+                    <span onclick="img18Click();">舌体歪斜</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/19-舌动异常.jpg" onclick="img19Click();">
+                    <span onclick="img19Click();">舌动异常</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/20-舌体强硬1.jpg" onclick="img20Click();">
+                    <span onclick="img20Click();">舌体强硬</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/14-舌紫黯.jpg" onclick="img14Click();">
+                    <span onclick="img14Click();">舌紫黯</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/22-舌绛深紫1.jpg" onclick="img22Click();">
+                    <span onclick="img22Click();">舌绛深紫</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/23-舌体溃烂1.jpg" onclick="img23Click();">
+                    <span onclick="img23Click();">舌体溃烂</span>
+                  </div>
+                </div>
+                <!-- 第五行 -->
+                <div id="line5" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/24-舌体干燥1.jpg" onclick="img24Click();">
+                    <span onclick="img24Click();">舌体干燥</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/25-舌下脉络曲张1.jpg" onclick="img25Click();">
+                    <span onclick="img25Click();">舌下脉络曲张</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/27-舌苔白1.jpg" onclick="img27Click();">
+                    <span onclick="img27Click();">舌苔白</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/28-苔白如积粉1.jpg" onclick="img28Click();">
+                    <span onclick="img28Click();">苔白如积粉</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/29-舌苔腐垢1.jpg" onclick="img29Click();">
+                    <span onclick="img29Click();">舌苔腐垢</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/30-舌苔黄3.jpg" onclick="img30Click();">
+                    <span onclick="img30Click();">舌苔黄</span>
+                  </div>
+                </div>
+                <!-- 第六行 -->
+                <div id="line6" class="lines">
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/31-舌苔灰黑3.jpg" onclick="img31Click();">
+                    <span onclick="img31Click();">舌苔灰黑</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/32-舌苔黄白相兼3.jpg" onclick="img32Click();">
+                    <span onclick="img32Click();">舌苔黄白相兼</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/33-舌苔腻1.jpg" onclick="img33Click();">
+                    <span onclick="img33Click();">舌苔腻</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/34-苔剥.jpg" onclick="img34Click();">
+                    <span onclick="img34Click();">苔剥</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/35-舌苔润滑3.jpg" onclick="img35Click();">
+                    <span onclick="img35Click();">舌苔润滑</span>
+                  </div>
+                  <div id="imgs" class="imgs">
+                    <img id="IMGS" src="../static/tongue_img/36-舌苔干燥.jpg" onclick="img36Click();">
+                    <span onclick="img36Click();">舌苔干燥</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 关闭符号x -->
+              <a class="close_note" onclick="popupToggle();">&#10005</a>
+            </div>
+            <div class="search-box">
+              <div class="inputBox">
+                <input type="text" name="symptom" class="symptom" id="symptom" required="required">
+                <span>症状</span>
+                <i id="underline"></i>
+              </div>
+              <button id="treat" class="treat" onclick="treatClick();">
+                <span>智能诊疗</span>
+              </button>
+            </div>
+            <div class="ssts">
+              <span>推荐搜索词：</span>
+              <label onclick="ksClick();">咳嗽 </label>
+              <label onclick="frClick();">发热 </label>
+              <label onclick="ttClick();">头痛 </label>
+              <label onclick="stbbClick();">舌苔薄白 </label>
+              <label onclick="jbClick();">经闭 </label>
+              <label onclick="jswwClick();">进食无味 </label>
+              <span>...</span>
+            </div>
+          </div>
+        </div>
+        <!-- 诊断结果图 -->
+        <div class="center-bottom">
+          <div id="node_re_graph" class="node_re_graph"></div>
+        </div>
+      </div>
+      <!-- 右列 -->
+      <div class="col col-right">
+        <!-- 方药饼图和证-证素得分图 联动图 -->
+        <div class="right-top">
+          <div id="pie_link_bar_graph" class="pie_link_bar_graph"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="../static/js/diagnosis.js"></script>
+
+<script src="../static/js/stacked_bar_graph.js"></script>
+<script src="../static/js/radar_graph.js"></script>
+<script src="../static/js/treemap_graph.js"></script>
+<script src="../static/js/pie_link_bar_graph.js"></script>
+<script src="../static/js/node_re_graph.js"></script>
+
+<script>
+  // 初始值用
+  var neo4j_data = eval('[{{ neo4j_data|safe }}]')
+  var data_zheng = neo4j_data[0]['data_zheng']
+  var data_zs = neo4j_data[0]['data_zs']
+  var data_zz = neo4j_data[0]['data_zz']
+  var data_link = neo4j_data[0]['data_link']
+  // 列表
+  var zzbm = eval('{{zzbm|safe}}')
+  var new_zs = eval('{{new_zs|safe}}')
+  var l = eval('{{l|safe}}')
+  // 字典
+  var score_sort = eval('[{{score_sort|safe}}]')
+  var zs = score_sort[0]['zs']
+  var score = score_sort[0]['score']
+  var zh_dict = eval('[{{zh_dict|safe}}]')
+  var zheng = zh_dict[0]['zheng']
+  var zs1 = zh_dict[0]['zs']
+  var score1 = zh_dict[0]['score']
+
+  var zh_dbf_cm = eval('[{{zh_dbf_cm|safe}}]')
+  var dbf = zh_dbf_cm[0]['dbf']
+  var cm_jl = zh_dbf_cm[0]['cm_jl']
+  // 字符串
+  var zheng_final = '{{zheng_final|safe}}'
+
+  // 执行各个图表可视化函数
+  stacked_bar_graph(zzbm, new_zs, l)
+  radar_graph(new_zs, l, zzbm)
+  treemap_graph(zs, score)
+  pie_link_bar_graph(zs1, score1, zheng, dbf, cm_jl)
+  node_re_graph(data_zheng, data_zs, data_zz, data_link)
+
+</script>
+
+</html>
